@@ -14,6 +14,7 @@ The following variables control whether a tool is installed (*true*) or not (*fa
 
 - **the_harvester**: 'The Harvester' is a gathering information tool about an URL.
 - **gasmask**: 'GasMasK' is an all in one Information gathering tool.
+- **datasploit**: 'DataSploit' is an OSINT Framework to perform various recon techniques, aggregate all the raw data, and give data in multiple formats.
 
 ## Example Playbook
 
@@ -24,6 +25,7 @@ Example of how to use this role:
          install_pip: false
          the_harvester: true
          gasmask: true
+         datasploit: true
       roles:
          - { role: mablanco.osint }
 

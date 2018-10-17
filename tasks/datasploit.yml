@@ -1,0 +1,25 @@
+---
+
+- name: DataSploit | Clone git repo
+  git:
+    repo: https://github.com/DataSploit/datasploit.git
+    dest: /opt/DataSploit
+    clone: yes
+    force: yes
+    depth: 1
+
+- name: DataSploit | Install pip requirements
+  pip:
+    requirements: /opt/DataSploit/requirements.txt
+    state: present
+
+- name: DataSploit | Make main script executable
+  file:
+    path: /opt/DataSploit/datasploit.py
+    mode: 0755
+
+- name: DataSploit | Create link to main script
+  file:
+    path: /usr/local/bin/datasploit
+    state: link
+    src: /opt/DataSploit/datasploit.py

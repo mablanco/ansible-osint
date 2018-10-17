@@ -12,3 +12,7 @@
 - name: Install 'GasMasK'
   include: gasmask.yml
   when: gasmask
+
+- name: Install 'DataSploit'
+  include: datasplot.yml
+  when: datasploit
