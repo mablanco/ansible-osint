@@ -14,5 +14,5 @@
   when: gasmask
 
 - name: Install 'DataSploit'
-  include: datasplot.yml
+  include: datasploit.yml
   when: datasploit
