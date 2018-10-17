@@ -13,6 +13,7 @@ If you need/want to install PIP and Virtualenv with this role, give the **instal
 The following variables control whether a tool is installed (*true*) or not (*false*).
 
 - **the_harvester**: 'The Harvester' is a gathering information tool about an URL.
+- **gasmask**: 'GasMasK' is an all in one Information gathering tool.
 
 ## Example Playbook
 
@@ -22,6 +23,7 @@ Example of how to use this role:
       vars:
          install_pip: false
          the_harvester: true
+         gasmask: true
       roles:
          - { role: mablanco.osint }
 

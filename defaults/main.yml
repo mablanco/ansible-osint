@@ -3,3 +3,4 @@
 
 install_pip: false
 the_harvester: false
+gasmask: false

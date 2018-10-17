@@ -1,0 +1,25 @@
+---
+
+- name: GasMasK | Clone git repo
+  git:
+    repo: https://github.com/twelvesec/gasmask.git
+    dest: /opt/GasMasK
+    clone: yes
+    force: yes
+    depth: 1
+
+- name: GasMasK | Install pip requirements
+  pip:
+    requirements: /opt/GasMasK/requirements.txt
+    state: present
+
+- name: GasMasK | Make main script executable
+  file:
+    path: /opt/GasMasK/gasmask.py
+    mode: 0755
+
+- name: GasMasK | Create link to main script
+  file:
+    path: /usr/local/bin/gasmask
+    state: link
+    src: /opt/GasMasK/theHarvester.py
