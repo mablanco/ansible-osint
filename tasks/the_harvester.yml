@@ -1,0 +1,25 @@
+---
+
+- name: The Harvester | Clone git repo
+  git:
+    repo: https://github.com/laramies/theHarvester.git
+    dest: /opt/theHarvester
+    clone: yes
+    force: yes
+    depth: 1
+
+- name: The Harvester | Install pip requisites
+  pip:
+    name: requests
+    state: present
+
+- name: The Harvester | Make main script executable
+  file:
+    path: /opt/theHarvester/theHarvester.py
+    mode: 0755
+
+- name: The Harvester | Create link to main script
+  file:
+    path: /usr/local/bin/theHarvester
+    state: link
+    src: /opt/theHarvester/theHarvester.py

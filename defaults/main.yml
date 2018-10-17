@@ -1,0 +1,5 @@
+---
+# defaults file for mablanco.osint
+
+install_pip: false
+the_harvester: false
