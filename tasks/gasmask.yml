@@ -22,4 +22,4 @@
   file:
     path: /usr/local/bin/gasmask
     state: link
-    src: /opt/GasMasK/theHarvester.py
+    src: /opt/GasMasK/gasmask.py
