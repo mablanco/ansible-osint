@@ -8,3 +8,7 @@
 - name: Install 'The Harvester'
   include: the_harvester.yml
   when: the_harvester
+
+- name: Install 'GasMasK'
+  include: gasmask.yml
+  when: gasmask
