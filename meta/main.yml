@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: osint
   author: Marco Antonio Blanco
   description: Deployment of assorted OSINT tools
   license: GPLv3
