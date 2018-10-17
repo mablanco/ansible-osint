@@ -8,7 +8,7 @@
     - pip
     - virtualenv
 
-- name: ReconScan | Install PIP & Virtualenv (Python 3)
+- name: PIP | Install PIP & Virtualenv (Python 3)
   easy_install:
     name: "{{ item }}"
     executable: easy_install3
