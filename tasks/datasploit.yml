@@ -12,14 +12,3 @@
   pip:
     requirements: /opt/DataSploit/requirements.txt
     state: present
-
-- name: DataSploit | Make main script executable
-  file:
-    path: /opt/DataSploit/datasploit.py
-    mode: 0755
-
-- name: DataSploit | Create link to main script
-  file:
-    path: /usr/local/bin/datasploit
-    state: link
-    src: /opt/DataSploit/datasploit.py
