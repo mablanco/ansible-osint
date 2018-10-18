@@ -4,11 +4,11 @@ Ansible role to install several OSINT related tools on a Linux system. This role
 
 ## Requirements
 - git CLI client
-- Python 2.6+ or 3.x
+- Python 2.6+ or 3.x + Setuptools
 - PIP & Virtualenv (for both Python 2 and 3). You can optionally install them with this role (read below)
 
 ## Role Variables
-If you need/want to install PIP and Virtualenv with this role, give the **install_pip** variable a *true* value.
+If you need/want to install PIP and Virtualenv with this role, give the **install_pip** variable a *true* value. Make sure that `easy_install` (part of Python Setuptools) is already available in the host.
 
 The following variables control whether a tool is installed (*true*) or not (*false*).
 
