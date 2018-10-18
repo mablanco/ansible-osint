@@ -5,10 +5,15 @@
     repo: https://github.com/DataSploit/datasploit.git
     dest: /opt/DataSploit
     clone: yes
-    force: yes
     depth: 1
 
 - name: DataSploit | Install pip requirements
   pip:
     requirements: /opt/DataSploit/requirements.txt
     state: present
+
+- name: DataSploit | Create default config
+  copy:
+    src: /opt/DataSploit/config_sample.py
+    dest: /opt/DataSploit/config.py
+    remote_src: yes
