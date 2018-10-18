@@ -7,12 +7,3 @@
   with_items:
     - pip
     - virtualenv
-
-- name: PIP | Install PIP & Virtualenv (Python 3)
-  easy_install:
-    name: "{{ item }}"
-    executable: easy_install3
-    state: latest
-  with_items:
-    - pip
-    - virtualenv
