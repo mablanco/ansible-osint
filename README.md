@@ -5,11 +5,9 @@ Ansible role to install several OSINT related tools on a Linux system. This role
 ## Requirements
 - git CLI client
 - Python 2.6+ & Setuptools
-- PIP & Virtualenv. You can optionally install them with this role (read below)
+- PIP & Virtualenv
 
 ## Role Variables
-If you need/want to install PIP and Virtualenv with this role, give the **install_pip** variable a *true* value. Make sure that `easy_install` (part of Python Setuptools) is already available in the host.
-
 The following variables control whether a tool is installed (*true*) or not (*false*).
 
 - **the_harvester**: 'The Harvester' is a gathering information tool about an URL.
@@ -22,7 +20,6 @@ Example of how to use this role:
 
     - hosts: sec-nodes
       vars:
-         install_pip: false
          the_harvester: true
          gasmask: true
          datasploit: true

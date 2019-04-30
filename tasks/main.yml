@@ -1,10 +1,6 @@
 ---
 # tasks file for mablanco.osint
 
-- name: Install PIP
-  include: pip.yml
-  when: install_pip
-
 - name: Install 'The Harvester'
   include: the_harvester.yml
   when: the_harvester

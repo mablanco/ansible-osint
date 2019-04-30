@@ -1,9 +1,0 @@
----
-
-- name: PIP | Install PIP & Virtualenv (Python 2)
-  easy_install:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - pip
-    - virtualenv
