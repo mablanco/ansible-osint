@@ -5,8 +5,9 @@
     repo: https://github.com/twelvesec/gasmask.git
     dest: /opt/GasMasK
     clone: yes
-    force: yes
+    force: no
     depth: 1
+    version: master
 
 - name: GasMasK | Install pip requirements
   pip:
