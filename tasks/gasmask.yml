@@ -12,6 +12,7 @@
 - name: GasMasK | Install pip requirements
   pip:
     requirements: /opt/GasMasK/requirements.txt
+    executable: pip3
     state: present
 
 - name: GasMasK | Make main script executable
