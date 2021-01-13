@@ -3,12 +3,12 @@
 
 - name: Install 'The Harvester'
   include: the_harvester.yml
-  when: the_harvester
+  when: the_harvester | bool
 
 - name: Install 'GasMasK'
   include: gasmask.yml
-  when: gasmask
+  when: gasmask | bool
 
 - name: Install 'DataSploit'
   include: datasploit.yml
-  when: datasploit
+  when: datasploit | bool
