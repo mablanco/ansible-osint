@@ -1,4 +1,17 @@
 ---
+# uv tool install is not idempotent for git requirements: it links the
+# commands again every time. Install only when the requirement changes.
+- name: "OSINT | List the tools installed with uv | {{ osint_tool }}"
+  ansible.builtin.command:
+    argv:
+      - "{{ osint_uv }}"
+      - tool
+      - list
+      - --show-version-specifiers
+  environment: "{{ osint_uv_environment }}"
+  register: osint_tool_list
+  changed_when: false
+
 - name: "OSINT | Install with uv | {{ osint_tool }}"
   ansible.builtin.command:
     argv:
@@ -7,7 +20,11 @@
       - install
       - --python
       - "{{ osint_python_version }}"
-      - "{{ osint_tool_spec }}"
+      # A version specifier, such as ==1.0, or a direct reference, such as git+
+      - "{{ osint_tool ~ (osint_tool_requirement if osint_tool_requirement is match('[=<>~!]') else ' @ ' ~ osint_tool_requirement) }}"
   environment: "{{ osint_uv_environment }}"
-  register: osint_tool_install
-  changed_when: "'is already installed' not in osint_tool_install.stderr"
+  changed_when: true
+  when: >-
+    osint_tool_list.stdout_lines
+    | select('match', '^' ~ osint_tool ~ ' v.*\[required: +' ~ (osint_tool_requirement | regex_escape) ~ '\]$')
+    | length == 0

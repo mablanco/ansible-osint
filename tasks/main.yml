@@ -81,14 +81,14 @@
   ansible.builtin.include_tasks: python-tool.yml
   vars:
     osint_tool: theharvester
-    osint_tool_spec: "theHarvester @ git+https://github.com/laramies/theHarvester@{{ osint_theharvester_version }}"
+    osint_tool_requirement: "git+https://github.com/laramies/theHarvester@{{ osint_theharvester_version }}"
   when: osint_theharvester
 
 - name: OSINT | Install Maigret
   ansible.builtin.include_tasks: python-tool.yml
   vars:
     osint_tool: maigret
-    osint_tool_spec: "maigret=={{ osint_maigret_version }}"
+    osint_tool_requirement: "=={{ osint_maigret_version }}"
   when: osint_maigret
 
 - name: OSINT | Install recon-ng
