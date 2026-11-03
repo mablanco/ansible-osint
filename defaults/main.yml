@@ -1,6 +1,23 @@
 ---
-# defaults file for mablanco.osint
+# Tools to install
+osint_theharvester: true
+osint_amass: true
+osint_subfinder: true
+osint_recon_ng: true
+osint_maigret: true
 
-the_harvester: false
-gasmask: false
-datasploit: false
+# Where the role installs uv, Python, the Python tools and the binaries.
+# Every tool's command goes to /usr/local/bin.
+osint_home: /opt/osint
+
+# Python version for the Python tools, installed by uv
+osint_python_version: "3.14"
+
+osint_uv_version: "0.13.5"
+osint_theharvester_version: "4.11.1"
+osint_amass_version: "5.1.3"
+osint_subfinder_version: "2.17.0"
+osint_maigret_version: "0.6.6"
+# recon-ng's last release, 5.1.2, does not run on Python 3.12 or later, so
+# the role installs a commit of master with the fix
+osint_recon_ng_version: 32b08fe7b6993ca1f2d8f76ba8f5d23c7f34a11d

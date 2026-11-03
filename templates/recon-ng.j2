@@ -1,0 +1,3 @@
+#!/bin/sh
+# {{ ansible_managed }}
+exec {{ osint_home }}/recon-ng/venv/bin/python {{ osint_home }}/recon-ng/src/{{ item }} "$@"

@@ -1,0 +1,38 @@
+---
+# Installs a release binary in its own versioned directory and, unless
+# osint_binary_link is false, links it from /usr/local/bin
+- name: "OSINT | Create the version directory | {{ osint_binary }}"
+  ansible.builtin.file:
+    path: "{{ osint_home }}/{{ osint_binary }}/{{ osint_binary_version }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "OSINT | Download the release | {{ osint_binary }}"
+  ansible.builtin.get_url:
+    url: "{{ osint_binary_url }}/{{ osint_binary_archive }}"
+    dest: "{{ osint_home }}/{{ osint_binary }}/{{ osint_binary_archive }}"
+    checksum: "{{ osint_binary_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: "OSINT | Extract the binary | {{ osint_binary }}"
+  ansible.builtin.unarchive:
+    src: "{{ osint_home }}/{{ osint_binary }}/{{ osint_binary_archive }}"
+    dest: "{{ osint_home }}/{{ osint_binary }}/{{ osint_binary_version }}"
+    remote_src: true
+    # Archives with a top-level directory, such as Amass's and uv's
+    extra_opts: "{{ ['--strip-components=1'] if osint_binary_archive.endswith('.tar.gz') else [] }}"
+    creates: "{{ osint_home }}/{{ osint_binary }}/{{ osint_binary_version }}/{{ osint_binary }}"
+    owner: root
+    group: root
+
+- name: "OSINT | Link the binary | {{ osint_binary }}"
+  ansible.builtin.file:
+    src: "{{ osint_home }}/{{ osint_binary }}/{{ osint_binary_version }}/{{ osint_binary }}"
+    path: "/usr/local/bin/{{ osint_binary }}"
+    state: link
+    force: true
+  when: osint_binary_link | default(true)

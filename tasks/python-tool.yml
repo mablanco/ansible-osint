@@ -1,0 +1,13 @@
+---
+- name: "OSINT | Install with uv | {{ osint_tool }}"
+  ansible.builtin.command:
+    argv:
+      - "{{ osint_uv }}"
+      - tool
+      - install
+      - --python
+      - "{{ osint_python_version }}"
+      - "{{ osint_tool_spec }}"
+  environment: "{{ osint_uv_environment }}"
+  register: osint_tool_install
+  changed_when: "'is already installed' not in osint_tool_install.stderr"
