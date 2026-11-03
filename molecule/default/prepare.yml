@@ -1,0 +1,22 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  tasks:
+    # The minimal container images lack Python, which Ansible needs. EL images
+    # already have it.
+    - name: Install Python
+      ansible.builtin.raw: >-
+        command -v python3 ||
+        if command -v apt-get; then apt-get update && apt-get install -y python3;
+        elif command -v zypper; then zypper --non-interactive install python3;
+        fi
+      register: prepare_python
+      changed_when: "'python3' not in prepare_python.stdout"
+
+    # Older versions of the role linked theHarvester from its git clone
+    - name: Add theHarvester's link of older versions of the role
+      ansible.builtin.raw: >-
+        mkdir -p /opt/theHarvester && touch /opt/theHarvester/theHarvester.py &&
+        ln -sf /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
+      changed_when: true

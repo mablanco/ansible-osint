@@ -1,0 +1,42 @@
+---
+- name: OSINT | recon-ng | Clone the repository
+  ansible.builtin.git:
+    repo: https://github.com/lanmaster53/recon-ng.git
+    dest: "{{ osint_home }}/recon-ng/src"
+    version: "{{ osint_recon_ng_version }}"
+    force: true
+
+- name: OSINT | recon-ng | Create the virtual environment
+  ansible.builtin.command:
+    argv:
+      - "{{ osint_uv }}"
+      - venv
+      - --python
+      - "{{ osint_python_version }}"
+      - "{{ osint_home }}/recon-ng/venv"
+    creates: "{{ osint_home }}/recon-ng/venv/bin/python"
+  environment: "{{ osint_uv_environment }}"
+
+- name: OSINT | recon-ng | Install the requirements
+  ansible.builtin.command:
+    argv:
+      - "{{ osint_uv }}"
+      - pip
+      - install
+      - --requirements
+      - "{{ osint_home }}/recon-ng/src/REQUIREMENTS"
+  environment: "{{ osint_uv_environment | combine({'VIRTUAL_ENV': osint_home ~ '/recon-ng/venv'}) }}"
+  register: osint_recon_ng_requirements
+  changed_when: "'Installed' in osint_recon_ng_requirements.stderr"
+
+- name: OSINT | recon-ng | Install the commands
+  ansible.builtin.template:
+    src: recon-ng.j2
+    dest: "/usr/local/bin/{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - recon-ng
+    - recon-cli
+    - recon-web

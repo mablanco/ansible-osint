@@ -1,2 +1,20 @@
 ---
-# vars file for mablanco.osint
+# Architecture names in the release archives
+osint_arch:
+  x86_64:
+    go: amd64
+    uv: x86_64
+  aarch64:
+    go: arm64
+    uv: aarch64
+
+osint_uv: "{{ osint_home }}/uv/{{ osint_uv_version }}/uv"
+
+# Keep uv, its Python and the tools in osint_home, and ignore the system's
+# Python, which is too old on some platforms
+osint_uv_environment:
+  UV_PYTHON_INSTALL_DIR: "{{ osint_home }}/python"
+  UV_PYTHON_PREFERENCE: only-managed
+  UV_TOOL_DIR: "{{ osint_home }}/tools"
+  UV_TOOL_BIN_DIR: /usr/local/bin
+  UV_CACHE_DIR: "{{ osint_home }}/cache"

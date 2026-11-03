@@ -1,0 +1,24 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Run every tool
+      ansible.builtin.command:
+        cmd: "{{ item.cmd }}"
+        # Not from the role's directories, to check the commands work anywhere
+        chdir: /
+      register: verify_tool
+      changed_when: false
+      failed_when: >-
+        verify_tool.rc != 0 or
+        item.expect not in (verify_tool.stdout ~ verify_tool.stderr)
+      loop:
+        - {cmd: theHarvester --help, expect: "usage: theHarvester"}
+        - {cmd: amass -version, expect: "v5.1.3"}
+        - {cmd: subfinder -version, expect: "v2.17.0"}
+        - {cmd: maigret --version, expect: "maigret 0.6.6"}
+        - {cmd: recon-ng --version, expect: "5.1.2"}
+        - {cmd: recon-cli --help, expect: "usage: recon-cli"}
+      loop_control:
+        label: "{{ item.cmd }}"

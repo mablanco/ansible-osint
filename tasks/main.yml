@@ -1,14 +1,96 @@
 ---
-# tasks file for mablanco.osint
+- name: OSINT | Check the architecture
+  ansible.builtin.assert:
+    that: ansible_facts['architecture'] in osint_arch
+    fail_msg: "The role supports x86_64 and aarch64, not {{ ansible_facts['architecture'] }}."
+    quiet: true
 
-- name: Install 'The Harvester'
-  include: the_harvester.yml
-  when: the_harvester | bool
+- name: OSINT | Update the package cache (Debian)
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_facts['os_family'] == 'Debian'
 
-- name: Install 'GasMasK'
-  include: gasmask.yml
-  when: gasmask | bool
+- name: OSINT | Install the requirements
+  ansible.builtin.package:
+    name:
+      - ca-certificates
+      - git
+      - gzip
+      - tar
+      - unzip
+    state: present
 
-- name: Install 'DataSploit'
-  include: datasploit.yml
-  when: datasploit | bool
+- name: OSINT | Create the installation directory
+  ansible.builtin.file:
+    path: "{{ osint_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: OSINT | Install uv
+  ansible.builtin.include_tasks: binary.yml
+  vars:
+    osint_binary: uv
+    osint_binary_version: "{{ osint_uv_version }}"
+    osint_binary_archive: "uv-{{ osint_arch[ansible_facts['architecture']].uv }}-unknown-linux-gnu.tar.gz"
+    osint_binary_url: "https://github.com/astral-sh/uv/releases/download/{{ osint_uv_version }}"
+    osint_binary_checksum: "sha256:https://github.com/astral-sh/uv/releases/download/{{ osint_uv_version }}/{{ osint_binary_archive }}.sha256"
+    osint_binary_link: false
+  when: osint_theharvester or osint_recon_ng or osint_maigret
+
+- name: OSINT | Install Amass
+  ansible.builtin.include_tasks: binary.yml
+  vars:
+    osint_binary: amass
+    osint_binary_version: "{{ osint_amass_version }}"
+    osint_binary_archive: "amass_linux_{{ osint_arch[ansible_facts['architecture']].go }}.tar.gz"
+    osint_binary_url: "https://github.com/owasp-amass/amass/releases/download/v{{ osint_amass_version }}"
+    osint_binary_checksum: "sha256:{{ osint_binary_url }}/amass_checksums.txt"
+  when: osint_amass
+
+- name: OSINT | Install subfinder
+  ansible.builtin.include_tasks: binary.yml
+  vars:
+    osint_binary: subfinder
+    osint_binary_version: "{{ osint_subfinder_version }}"
+    osint_binary_archive: "subfinder_{{ osint_subfinder_version }}_linux_{{ osint_arch[ansible_facts['architecture']].go }}.zip"
+    osint_binary_url: "https://github.com/projectdiscovery/subfinder/releases/download/v{{ osint_subfinder_version }}"
+    osint_binary_checksum: "sha256:{{ osint_binary_url }}/subfinder_{{ osint_subfinder_version }}_checksums.txt"
+  when: osint_subfinder
+
+# Older versions of this role linked theHarvester's script from its git clone
+# in /opt/theHarvester, and uv does not overwrite a command it did not install
+- name: OSINT | Check for theHarvester's link of older versions of this role
+  ansible.builtin.stat:
+    path: /usr/local/bin/theHarvester
+  register: osint_legacy_theharvester
+  when: osint_theharvester
+
+- name: OSINT | Remove theHarvester's link of older versions of this role
+  ansible.builtin.file:
+    path: /usr/local/bin/theHarvester
+    state: absent
+  when:
+    - osint_theharvester
+    - osint_legacy_theharvester.stat.islnk | default(false)
+    - osint_legacy_theharvester.stat.lnk_source.startswith('/opt/theHarvester/')
+
+- name: OSINT | Install theHarvester
+  ansible.builtin.include_tasks: python-tool.yml
+  vars:
+    osint_tool: theharvester
+    osint_tool_requirement: "git+https://github.com/laramies/theHarvester@{{ osint_theharvester_version }}"
+  when: osint_theharvester
+
+- name: OSINT | Install Maigret
+  ansible.builtin.include_tasks: python-tool.yml
+  vars:
+    osint_tool: maigret
+    osint_tool_requirement: "=={{ osint_maigret_version }}"
+  when: osint_maigret
+
+- name: OSINT | Install recon-ng
+  ansible.builtin.include_tasks: recon-ng.yml
+  when: osint_recon_ng
